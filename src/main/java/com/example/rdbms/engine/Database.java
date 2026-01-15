@@ -4,9 +4,11 @@ import com.example.rdbms.model.Column;
 import com.example.rdbms.model.Row;
 import com.example.rdbms.model.Table;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class Database {
     private final Map<String, Table> tables = new HashMap<>();
@@ -74,6 +76,37 @@ public class Database {
     public List<Row> selectAll(String tableName) {
         Table table = getTable(tableName);
         return table.getRows();
+    }
+
+    /**
+     * Select a single record from a table
+     */
+    public List<Row> selectWhere(String tableName, String columnName, Object value) {
+        Table table = getTable(tableName);
+        List<Row> result = new ArrayList<>();
+
+        for (Row row : table.getRows()) {
+            Object cell = row.getValue(columnName);
+            if (cell != null && cell.equals(value)) {
+                result.add(row);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * Update a single row in the Database
+     */
+    public void update(String tableName, String whereColumn, Object whereValue, String targetColumn, Object newValue){
+        Table table = getTable(tableName);
+
+        for (Row row : table.getRows()){
+            Object existingValue = row.getValue(whereColumn);
+            if (existingValue != null && existingValue.equals(whereValue)){
+                row.setValue(targetColumn, newValue);
+            }
+        }
     }
 
     public List<Column> selectAllColumns(String tableName) {
