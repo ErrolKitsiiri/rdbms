@@ -18,7 +18,11 @@ public class SqlParser {
 
     // ========================= EXECUTE =========================
     public void execute(String sql) {
-        sql = sql.trim();
+        sql = sql
+                .trim()
+                .replaceAll("\\s+", " ")
+                .replace(" (", "(")
+                .replace(" )", ")");
 
         if (sql.toUpperCase().startsWith("CREATE TABLE")) {
             parseCreateTable(sql);
@@ -61,10 +65,13 @@ public class SqlParser {
     // ========================= CREATE TABLE =========================
     private void parseCreateTable(String sql) {
         try {
-            String inside = sql.substring(sql.indexOf("(") + 1, sql.lastIndexOf(")")).trim();
-            String tableName = sql.split("\\s+")[2];
+            // Extract table name
+            String afterCreate = sql.substring("CREATE TABLE".length()).trim();
+            String tableName = afterCreate.substring(0, afterCreate.indexOf("(")).trim();
 
-            String[] cols = inside.split(",");
+            // Extract columns
+            String columnsPart = sql.substring(sql.indexOf("(") + 1, sql.lastIndexOf(")")).trim();
+            String[] cols = columnsPart.split(",");
             List<Column> columns = new ArrayList<>();
 
             for (String colDef : cols) {
@@ -76,7 +83,10 @@ public class SqlParser {
                 boolean unique = false;
 
                 for (int i = 2; i < parts.length; i++) {
-                    if (parts[i].equalsIgnoreCase("PRIMARY")) primaryKey = true;
+                    if (parts[i].equalsIgnoreCase("PRIMARY") && i + 1 < parts.length && parts[i + 1].equalsIgnoreCase("KEY")) {
+                        primaryKey = true;
+                        i++; // skip "KEY"
+                    }
                     if (parts[i].equalsIgnoreCase("UNIQUE")) unique = true;
                 }
 
@@ -90,6 +100,7 @@ public class SqlParser {
             System.out.println("Failed to create table: " + e.getMessage());
         }
     }
+
 
     // ========================= INSERT =========================
     private void parseInsert(String sql) {
