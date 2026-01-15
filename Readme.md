@@ -5,7 +5,6 @@ This project simulates a sample RDBMS for MySQL
 javac src\main\java\com\example\rdbms\model\*.java
 javac -cp src\main\java src\main\java\com\example\rdbms\engine\*.java
 javac -cp src\main\java src\main\java\com\example\rdbms/parser/*.java
-javac -cp src\main\java src\main\java\com\example\rdbms/repl/*.java
 javac -cp src\main\java src\main\java\com\example\rdbms\Main.java
 
 java -cp src\main\java com.example.rdbms.Main
