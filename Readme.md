@@ -111,7 +111,7 @@ rdbms> exit
 Goodbye!
 
 
-## Design Philosophy
+## Design 
 - Clear separation of concerns (model, engine, parser, REPL)
 - Immutable schema metadata for safety
 - Minimal SQL parsing to focus on core database concepts
