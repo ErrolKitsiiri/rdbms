@@ -120,7 +120,7 @@ Goodbye!
 ## Notes
 - This RDBMS is in-memory only. No persistence to disk.
 - SQL support is limited for demonstration:
-  Supports CREATE TABLE, INSERT INTO, SELECT * FROM 
+  Supports CREATE TABLE, INSERT INTO, SELECT * FROM , SELECT * FROM table WHERE column = value, UPDATE table SET column = value WHERE column = value, DELETE FROM table WHERE column = value and 
   Basic primary key and unique constraints enforced
 - Future extensions could include:
   - WHERE conditions
